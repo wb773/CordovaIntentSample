@@ -29,6 +29,7 @@ var app = {
         document.addEventListener('deviceready', this.onDeviceReady, false);
         document.getElementById('mainbutton').addEventListener('click', this.clickmain, false);
         document.getElementById('intentbutton').addEventListener('click', this.clickIntent, false);
+        document.getElementById('newintentbutton').addEventListener('click', this.clickNewIntent, false);
         document.getElementById('checkbutton').addEventListener('click', this.clickCheck, false);
     
     },
@@ -38,6 +39,7 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
+        window.open = cordova.InAppBrowser.open;
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
@@ -57,6 +59,9 @@ var app = {
     clickIntent: function(){
         window.resolveLocalFileSystemURL(cordova.file.cacheDirectory + "sample.txt", app.openText, function(){});
     },
+    clickNewIntent: function(){
+        window.resolveLocalFileSystemURL(cordova.file.cacheDirectory + "sample.txt", app.inappbrowserOpen, function(){});
+    },
     clickCheck: function(){
         app.checkPermission();
     },
@@ -75,7 +80,7 @@ var app = {
         window.plugins.webintent.startActivity(
             {
                 action: window.plugins.webintent.ACTION_VIEW,
-                url: cordova.file.cacheDirectory + "sample.txt",
+                url: cordova.file.cacheDirectory + "sample.html",
                 type: 'text/plain'
             },
             function() {
@@ -166,7 +171,11 @@ var app = {
         }, function(error){
             console.error("The following error occurred: "+error);
         }, cordova.plugins.diagnostic.runtimePermission.READ_EXTERNAL_STORAGE);
-    }
+    },
+    inappbrowserOpen: function(){
+        var fileURL = cordova.file.cacheDirectory + "sample.txt";
+        cordova.InAppBrowser.open(fileURL, "_blank", "location=true");
+    },
 };
 
 app.initialize();
