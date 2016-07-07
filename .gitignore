@@ -1,0 +1,8 @@
+node_modules
+.tmp
+platforms
+plugins
+*.swp
+*.swo
+*.log
+*.DS_Store
